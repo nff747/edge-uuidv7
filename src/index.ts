@@ -15,5 +15,8 @@ export function uuidv7Buffer(buffer = defaultBuffer): Uint8Array {
     buffer[4] = (now / 0x100) & 0xff;
     buffer[5] = now & 0xff;
     
+    buffer[6] = (buffer[6] & 0x0f) | 0x70;
+    buffer[8] = (buffer[8] & 0x3f) | 0x80;
+    
     return buffer;
 }
