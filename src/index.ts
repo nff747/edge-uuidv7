@@ -12,7 +12,7 @@ let seqB = 0n;
 
 let _crypto: Crypto | any = typeof crypto !== 'undefined' ? crypto : undefined;
 
-export function uuidv7Buffer(buffer: Uint8Array = defaultBuffer): Uint8Array {
+export function uuidv7Buffer(buffer?: Uint8Array): Uint8Array {
   if (!_crypto) {
     _crypto = require('crypto').webcrypto;
   }
@@ -45,33 +45,34 @@ export function uuidv7Buffer(buffer: Uint8Array = defaultBuffer): Uint8Array {
     }
   }
 
+  const buf = buffer || new Uint8Array(16);
   const tsMsb = Math.floor(ts / 4294967296); // ts / 2^32 (16 bits)
   const tsLsb = ts >>> 0; // ts & 0xFFFFFFFF (32 bits)
 
-  buffer[0] = tsMsb >>> 8;
-  buffer[1] = tsMsb & 0xff;
-  buffer[2] = tsLsb >>> 24;
-  buffer[3] = (tsLsb >>> 16) & 0xff;
-  buffer[4] = (tsLsb >>> 8) & 0xff;
-  buffer[5] = tsLsb & 0xff;
+  buf[0] = tsMsb >>> 8;
+  buf[1] = tsMsb & 0xff;
+  buf[2] = tsLsb >>> 24;
+  buf[3] = (tsLsb >>> 16) & 0xff;
+  buf[4] = (tsLsb >>> 8) & 0xff;
+  buf[5] = tsLsb & 0xff;
 
-  buffer[6] = 0x70 | ((seqA >>> 8) & 0x0f);
-  buffer[7] = seqA & 0xff;
+  buf[6] = 0x70 | ((seqA >>> 8) & 0x0f);
+  buf[7] = seqA & 0xff;
 
-  buffer[8] = 0x80 | Number((seqB >> 56n) & 0x3fn);
-  buffer[9] = Number((seqB >> 48n) & 0xffn);
-  buffer[10] = Number((seqB >> 40n) & 0xffn);
-  buffer[11] = Number((seqB >> 32n) & 0xffn);
-  buffer[12] = Number((seqB >> 24n) & 0xffn);
-  buffer[13] = Number((seqB >> 16n) & 0xffn);
-  buffer[14] = Number((seqB >> 8n) & 0xffn);
-  buffer[15] = Number(seqB & 0xffn);
+  buf[8] = 0x80 | Number((seqB >> 56n) & 0x3fn);
+  buf[9] = Number((seqB >> 48n) & 0xffn);
+  buf[10] = Number((seqB >> 40n) & 0xffn);
+  buf[11] = Number((seqB >> 32n) & 0xffn);
+  buf[12] = Number((seqB >> 24n) & 0xffn);
+  buf[13] = Number((seqB >> 16n) & 0xffn);
+  buf[14] = Number((seqB >> 8n) & 0xffn);
+  buf[15] = Number(seqB & 0xffn);
 
-  return buffer;
+  return buf;
 }
 
 export function uuidv7(): string {
-  const buffer = uuidv7Buffer();
+  const buffer = uuidv7Buffer(defaultBuffer);
   return (
     byteToHex[buffer[0]] +
     byteToHex[buffer[1]] +
