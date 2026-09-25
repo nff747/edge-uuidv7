@@ -1,0 +1,11 @@
+{
+  "name": "edge-uuidv7",
+  "version": "1.0.0",
+  "description": "Zero-allocation, time-ordered UUIDv7 generator",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "keywords": ["uuid", "uuidv7", "edge", "zero-allocation", "fast"]
+}
