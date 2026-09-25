@@ -4,3 +4,6 @@ if (!cryptoObj && typeof globalThis !== 'undefined' && globalThis.crypto) {
     cryptoObj = globalThis.crypto;
 }
 const defaultBuffer = new Uint8Array(16);
+export function uuidv7Buffer(buffer = defaultBuffer): Uint8Array {
+    return buffer;
+}
