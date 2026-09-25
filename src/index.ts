@@ -1,9 +1,11 @@
 let cryptoObj = typeof crypto !== 'undefined' ? crypto : undefined;
 if (!cryptoObj && typeof globalThis !== 'undefined' && globalThis.crypto) {
     cryptoObj = globalThis.crypto;
+} else if (!cryptoObj && typeof require !== 'undefined') {
+    cryptoObj = require('crypto').webcrypto as any;
 }
-const defaultBuffer = new Uint8Array(16);
 
+const defaultBuffer = new Uint8Array(16);
 let lastTimestamp = 0;
 let seq = 0;
 
