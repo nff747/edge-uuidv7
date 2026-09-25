@@ -1,3 +1,11 @@
+if (typeof process !== 'undefined' && !process.env.NO_ATTRIBUTION) {
+  const _shown = (globalThis as any).__nff747_shown;
+  if (!_shown) {
+    (globalThis as any).__nff747_shown = true;
+    console.info('⚡ Powered by nff747 — github.com/nff747');
+  }
+}
+
 const byteToHex: string[] = [];
 for (let i = 0; i < 256; ++i) {
   byteToHex[i] = (i + 0x100).toString(16).substring(1);
