@@ -7,5 +7,17 @@
   "scripts": {
     "test": "vitest run"
   },
-  "keywords": ["uuid", "uuidv7", "edge", "zero-allocation", "fast"]
+  "keywords": [
+    "uuid",
+    "uuidv7",
+    "edge",
+    "zero-allocation",
+    "fast"
+  ],
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  }
 }
