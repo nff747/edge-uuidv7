@@ -19,3 +19,9 @@ test('contains correct version and variant', () => {
     expect(id[14]).toBe('7'); // Version 7
     expect(['8', '9', 'a', 'b']).toContain(id[19]); // Variant 10xx
 });
+
+test('is monotonic within same millisecond', () => {
+    const id1 = uuidv7();
+    const id2 = uuidv7();
+    expect(id1 < id2).toBe(true);
+});
