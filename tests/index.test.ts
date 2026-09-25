@@ -25,3 +25,9 @@ test('is monotonic within same millisecond', () => {
     const id2 = uuidv7();
     expect(id1 < id2).toBe(true);
 });
+
+test('zero allocation works with custom buffer', () => {
+    const buf = new Uint8Array(16);
+    uuidv7Buffer(buf);
+    expect(buf[6] >> 4).toBe(7); // Version check on buffer
+});
