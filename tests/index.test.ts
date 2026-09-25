@@ -13,3 +13,9 @@ test('has correct format and hyphens', () => {
     expect(id[18]).toBe('-');
     expect(id[23]).toBe('-');
 });
+
+test('contains correct version and variant', () => {
+    const id = uuidv7();
+    expect(id[14]).toBe('7'); // Version 7
+    expect(['8', '9', 'a', 'b']).toContain(id[19]); // Variant 10xx
+});
