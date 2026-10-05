@@ -18,7 +18,7 @@
     "fast"
   ],
   "author": "nff747",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nff747/edge-uuidv7.git"
