@@ -26,4 +26,4 @@ uuidv7Buffer(buf);
 
 ## 📄 License
 
-MIT © [nff747](https://github.com/nff747)
+Apache 2.0 © [nff747](https://github.com/nff747)
