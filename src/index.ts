@@ -1,4 +1,3 @@
-
 const byteToHex: string[] = [];
 for (let i = 0; i < 256; ++i) {
   byteToHex[i] = (i + 0x100).toString(16).substring(1);
@@ -96,4 +95,24 @@ export function uuidv7(): string {
     byteToHex[buffer[14]] +
     byteToHex[buffer[15]]
   );
+}
+
+/**
+ * Extracts Unix epoch timestamp in milliseconds embedded in a UUIDv7 string.
+ */
+export function extractTimestamp(uuid: string): number {
+  const clean = uuid.replace(/-/g, '');
+  if (clean.length !== 32) {
+    throw new Error(`Invalid UUID string length: ${uuid}`);
+  }
+  const hex = clean.substring(0, 12);
+  return parseInt(hex, 16);
+}
+
+/**
+ * Validates whether a UUID string conforms to standard RFC 9562 UUIDv7 format.
+ */
+export function isValidUUIDv7(uuid: string): boolean {
+  const pattern = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return pattern.test(uuid);
 }
