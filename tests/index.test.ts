@@ -31,3 +31,24 @@ test('zero allocation works with custom buffer', () => {
     uuidv7Buffer(buf);
     expect(buf[6] >> 4).toBe(7); // Version check on buffer
 });
+
+import { extractTimestamp, isValidUUIDv7 } from '../src/index';
+
+test('validates RFC 9562 format and rejects invalid versions', () => {
+    const valid = uuidv7();
+    expect(isValidUUIDv7(valid)).toBe(true);
+
+    expect(isValidUUIDv7('not-a-uuid')).toBe(false);
+    // UUIDv4 (version 4)
+    expect(isValidUUIDv7('018e3d6f-7128-4bc2-8921-123456789abc')).toBe(false);
+});
+
+test('extracts embedded Unix epoch timestamp accurate within current second', () => {
+    const before = Date.now();
+    const id = uuidv7();
+    const after = Date.now();
+
+    const extracted = extractTimestamp(id);
+    expect(extracted).toBeGreaterThanOrEqual(before);
+    expect(extracted).toBeLessThanOrEqual(after);
+});
