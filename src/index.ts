@@ -6,7 +6,7 @@ for (let i = 0; i < 256; ++i) {
 const defaultBuffer = new Uint8Array(16);
 const randBuffer = new Uint8Array(10);
 
-let lastTimestamp = 0;
+let lastTimestamp = -1;
 let seqA = 0;
 let seqB = 0n;
 
@@ -14,9 +14,11 @@ let _crypto: Crypto | any = typeof crypto !== 'undefined' ? crypto : undefined;
 
 export function uuidv7Buffer(buffer?: Uint8Array): Uint8Array {
   if (!_crypto) {
-    _crypto = require('crypto').webcrypto;
+    throw new Error('A Web Crypto implementation is required');
   }
+  if (buffer && buffer.length < 16) throw new RangeError('UUID buffer must contain at least 16 bytes');
   let ts = Date.now();
+  if (!Number.isSafeInteger(ts) || ts < 0 || ts > 0xffffffffffff) throw new RangeError('Timestamp is outside the UUIDv7 range');
   
   if (ts > lastTimestamp) {
     lastTimestamp = ts;
@@ -32,12 +34,15 @@ export function uuidv7Buffer(buffer?: Uint8Array): Uint8Array {
            (BigInt(randBuffer[8]) << 8n) |
            (BigInt(randBuffer[9])); // 8 bits
   } else {
+    // Preserve the logical timestamp if the wall clock moves backwards.
+    ts = lastTimestamp;
     // Increment monotonic counter
     seqB++;
     if (seqB >= (1n << 62n)) {
       seqB = 0n;
       seqA++;
       if (seqA >= (1 << 12)) {
+        if (lastTimestamp === 0xffffffffffff) throw new RangeError('UUIDv7 sequence exhausted');
         seqA = 0;
         lastTimestamp++;
         ts = lastTimestamp;
@@ -101,10 +106,8 @@ export function uuidv7(): string {
  * Extracts Unix epoch timestamp in milliseconds embedded in a UUIDv7 string.
  */
 export function extractTimestamp(uuid: string): number {
+  if (!isValidUUIDv7(uuid)) throw new Error('Invalid UUIDv7 string');
   const clean = uuid.replace(/-/g, '');
-  if (clean.length !== 32) {
-    throw new Error(`Invalid UUID string length: ${uuid}`);
-  }
   const hex = clean.substring(0, 12);
   return parseInt(hex, 16);
 }

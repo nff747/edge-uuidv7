@@ -1,5 +1,5 @@
-import { expect, test } from 'vitest';
-import { uuidv7 } from '../src/index';
+import { expect, test, vi } from 'vitest';
+import { uuidv7, uuidv7Buffer, extractTimestamp } from '../src/index';
 
 test('uuidv7 format', () => {
   const id = uuidv7();
@@ -19,4 +19,21 @@ test('uuidv7 monotonic generation', () => {
   for (let i = 1; i < ids.length; i++) {
     expect(ids[i - 1] < ids[i]).toBe(true);
   }
+});
+
+test('preserves ordering and logical time when the system clock moves backward', () => {
+  const now = Date.now() + 10000;
+  const clock = vi.spyOn(Date, 'now').mockReturnValue(now);
+  try {
+    const first = uuidv7();
+    clock.mockReturnValue(now - 5000);
+    const second = uuidv7();
+    expect(second > first).toBe(true);
+    expect(extractTimestamp(second)).toBe(now);
+  } finally { clock.mockRestore(); }
+});
+
+test('rejects invalid buffers and timestamp strings', () => {
+  expect(() => uuidv7Buffer(new Uint8Array(15))).toThrow(RangeError);
+  expect(() => extractTimestamp('zzzzzzzz-zzzz-7zzz-8zzz-zzzzzzzzzzzz')).toThrow();
 });
