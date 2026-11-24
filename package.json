@@ -17,7 +17,7 @@
     "monotonic",
     "fast"
   ],
-  "author": "nff747",
+  "author": "Lunar Paradox <engineering@lunarparadox.com>",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
   "bugs": {
     "url": "https://github.com/nff747/edge-uuidv7/issues"
   },
-  "homepage": "https://github.com/nff747/edge-uuidv7#readme",
+  "homepage": "https://lunarparadox.com",
   "devDependencies": {
     "@types/node": "^22.10.2",
     "tsup": "^8.3.5",
